@@ -6,8 +6,11 @@
   <a href="https://opensource.org/licenses/Apache-2.0"><img src="https://img.shields.io/badge/License-Apache%202.0-blue.svg" alt="License: Apache 2.0"></a>
 </p>
 <p align="center">A powerful, feature-rich Neovim configuration optimized for Python development and general productivity.</p>
+<p align="center">
+  <img src="images/neovim_setup.png" alt="Neovim Setup Screenshot" width="600">
+</p>
 
----
+[---](---)
 
 ## ✨ Features
 
