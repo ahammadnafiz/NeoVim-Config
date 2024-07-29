@@ -1,4 +1,4 @@
-'@ahammadnafiz'
+" @ahammadnafiz
 
 " Explicitly set compiler path
 let $PATH = $PATH . ';C:\MinGW\bin'
@@ -26,20 +26,20 @@ Plug 'Vimjas/vim-python-pep8-indent'
 Plug 'heavenshell/vim-pydocstring', { 'do': 'make install', 'for': 'python' }
 
 " Additional plugins for enhanced development
-Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
-Plug 'junegunn/fzf.vim'
 Plug 'airblade/vim-gitgutter'
 Plug 'tpope/vim-fugitive'
 Plug 'preservim/tagbar'
 Plug 'Yggdroot/indentLine'
 Plug 'lewis6991/gitsigns.nvim'
 Plug 'folke/which-key.nvim'
+
+" Telescope and its dependencies
 Plug 'nvim-lua/plenary.nvim'
+Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.x' }
+Plug 'nvim-tree/nvim-web-devicons'
 
 " New powerful plugins
-Plug 'nvim-telescope/telescope.nvim'
 Plug 'folke/trouble.nvim'
-Plug 'kyazdani42/nvim-web-devicons'
 Plug 'lukas-reineke/indent-blankline.nvim'
 Plug 'numToStr/Comment.nvim'
 Plug 'folke/zen-mode.nvim'
@@ -86,7 +86,6 @@ set ignorecase
 set smartcase
 set incsearch
 set hlsearch
-"set colorcolumn=88
 set undofile
 set undodir=~/.vim/undodir
 set completeopt=menuone,noselect
@@ -120,26 +119,7 @@ let g:coc_global_extensions = [
 " Key mappings
 let mapleader = " "
 nnoremap <leader>e :NERDTreeToggle<CR>
-nnoremap <C-p> :Telescope find_files<CR>
-nnoremap <leader>ff <cmd>Telescope find_files<cr>
-nnoremap <leader>fg <cmd>Telescope live_grep<cr>
-nnoremap <leader>fb <cmd>Telescope buffers<cr>
-nnoremap <leader>fh <cmd>Telescope help_tags<cr>
-nnoremap <leader>xx <cmd>TroubleToggle<cr>
-nnoremap <leader>xw <cmd>TroubleToggle workspace_diagnostics<cr>
-nnoremap <leader>xd <cmd>TroubleToggle document_diagnostics<cr>
-nnoremap <leader>xq <cmd>TroubleToggle quickfix<cr>
-nnoremap <leader>xl <cmd>TroubleToggle loclist<cr>
-nnoremap <silent> <leader>z :ZenMode<CR>
-nnoremap <C-f> :NERDTreeFocus<CR>
-nnoremap <C-n> :NERDTree<CR>
-nnoremap <C-t> :NERDTreeToggle<CR>
-nnoremap <C-l> :call CocActionAsync('jumpDefinition')<CR>
 nmap <F8> :TagbarToggle<CR>
-
-" FZF mappings
-nnoremap <leader>b :Buffers<CR>
-nnoremap <leader>h :History<CR>
 
 " Python-specific mappings
 autocmd FileType python map <buffer> <F9> :w<CR>:exec '!python3' shellescape(@%, 1)<CR>
@@ -165,6 +145,33 @@ let g:airline_symbols.branch = ''
 let g:airline_symbols.readonly = ''
 let g:airline_symbols.linenr = '||'
 
+" Auto-commands
+augroup PythonSpecific
+    autocmd!
+    autocmd FileType python setlocal completeopt-=preview
+    autocmd FileType python setlocal foldmethod=indent
+    autocmd FileType python setlocal foldlevel=99
+augroup END
+
+
+" Function to print compiler info (if needed)
+function! PrintCompilerInfo()
+    echo "Path: " . $PATH
+    echo "Make Program: " . g:make_program
+    if executable('gcc')
+        echo "GCC is executable"
+    else
+        echo "GCC is not executable"
+    endif
+    if executable('clang')
+        echo "Clang is executable"
+    else
+        echo "Clang is not executable"
+    endif
+endfunction
+
+command! CompilerInfo call PrintCompilerInfo()
+
 " Lua Configuration
 lua << EOF
 -- Load impatient for faster startup
@@ -177,20 +184,34 @@ require('gitsigns').setup()
 require('which-key').setup {}
 
 -- Telescope setup
-require('telescope').setup {
-    defaults = {
-        file_sorter = require('telescope.sorters').get_fzy_sorter,
-        prompt_prefix = ' >',
-        color_devicons = true,
+local actions = require('telescope.actions')
 
-        file_previewer   = require('telescope.previewers').vim_buffer_cat.new,
-        grep_previewer   = require('telescope.previewers').vim_buffer_vimgrep.new,
-        qflist_previewer = require('telescope.previewers').vim_buffer_qflist.new,
+require('telescope').setup{
+  defaults = {
+    mappings = {
+      i = {
+        ["<C-j>"] = actions.move_selection_next,
+        ["<C-k>"] = actions.move_selection_previous,
+        ["<C-q>"] = actions.send_to_qflist,
+      },
     },
-    extensions = {
-        -- Add any extensions here
+    file_ignore_patterns = {"node_modules"},
+  },
+  pickers = {
+    find_files = {
+      theme = "dropdown",
     }
+  },
 }
+
+-- Telescope keymaps
+local builtin = require('telescope.builtin')
+vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
+vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
+vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
+vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
+vim.keymap.set('n', '<leader>fr', builtin.oldfiles, {})
+vim.keymap.set('n', '<leader>fs', builtin.grep_string, {})
 
 -- Trouble setup
 require('trouble').setup {}
@@ -220,56 +241,12 @@ require('project_nvim').setup {}
 -- Comment setup
 require('Comment').setup()
 
--- Indent-blankline setup (updated for version 3)
+-- Indent-blankline setup
 require("ibl").setup {
     -- Add any specific configurations you want here
-    -- For example:
-    -- indent = { char = "│" },
-    -- scope = { show_start = false, show_end = false },
 }
 
 -- Zen-mode and Twilight setup
 require('zen-mode').setup {}
 require('twilight').setup {}
 EOF
-
-" Auto-commands
-augroup PythonSpecific
-    autocmd!
-    autocmd FileType python setlocal completeopt-=preview
-    autocmd FileType python setlocal foldmethod=indent
-    autocmd FileType python setlocal foldlevel=99
-augroup END
-
-" CoC completion
-inoremap <silent><expr> <TAB>
-      \ pumvisible() ? coc#_select_confirm() :
-      \ coc#expandableOrJumpable() ? "\<C-r>=coc#rpc#request('doKeymap', ['snippets-expand-jump',''])\<CR>" :
-      \ <SID>check_back_space() ? "\<TAB>" :
-      \ coc#refresh()
-
-function! s:check_back_space() abort
-  let col = col('.') - 1
-  return !col || getline('.')[col - 1]  =~# '\s'
-endfunction
-
-let g:coc_snippet_next = '<tab>'
-
-" Function to print compiler info (if needed)
-function! PrintCompilerInfo()
-    echo "Path: " . $PATH
-    echo "Make Program: " . g:make_program
-    if executable('gcc')
-        echo "GCC is executable"
-    else
-        echo "GCC is not executable"
-    endif
-    if executable('clang')
-        echo "Clang is executable"
-    else
-        echo "Clang is not executable"
-    endif
-endfunction
-
-command! CompilerInfo call PrintCompilerInfo()
-
