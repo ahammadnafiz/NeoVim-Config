@@ -19,6 +19,7 @@ Plug 'https://github.com/rstacruz/vim-closer'
 Plug 'bluz71/vim-moonfly-colors', { 'as': 'moonfly' }
 Plug 'jiangmiao/auto-pairs'
 Plug 'vimwiki/vimwiki'
+Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
 " Python-specific plugins
 Plug 'vim-python/python-syntax'
@@ -36,6 +37,8 @@ Plug 'folke/which-key.nvim'
 " Telescope and its dependencies
 Plug 'nvim-lua/plenary.nvim'
 Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.x' }
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
 Plug 'nvim-tree/nvim-web-devicons'
 
 " New powerful plugins
@@ -51,6 +54,13 @@ Plug 'windwp/nvim-autopairs'
 Plug 'norcalli/nvim-colorizer.lua'
 Plug 'folke/todo-comments.nvim'
 Plug 'ahmedkhalf/project.nvim'
+
+" Zettelkasten plugins
+Plug 'michal-h21/vim-zettel'
+
+" Rust plugin
+Plug 'rust-lang/rust.vim'
+
 call plug#end()
 
 " Basic Settings
@@ -131,9 +141,23 @@ inoremap <silent><expr> <cr> "\<c-g>u\<CR>"
 " Pydocstring configuration
 let g:pydocstring_formatter = 'google'
 
+" Zettelkasten key mappings
+nnoremap <leader>zn :ZettelNew<space>
+nnoremap <leader>zo :ZettelOpen<CR>
+nnoremap <leader>zb :ZettelBacklinks<CR>
+nnoremap <leader>zu :ZettelInbox<CR>
+nnoremap <leader>zl :ZettelGenerateLinks<CR>
+nnoremap <leader>zt :ZettelGenerateTags<CR>
+nnoremap <leader>zs :ZettelSearch<CR>
+
+" fzf configuration
+nnoremap <leader>pf :Files<CR>
+nnoremap <leader>pg :Rg<CR>
+nnoremap <leader>pb :Buffers<CR>
+
 " NERDTree configuration
-let g:NERDTreeDirArrowExpandable="+"
-let g:NERDTreeDirArrowCollapsible="~"
+let g:NERDTreeDirArrowExpandable=" "
+let g:NERDTreeDirArrowCollapsible=" "
 
 " Airline configuration
 let g:airline_powerline_fonts = 1
@@ -252,4 +276,25 @@ require("ibl").setup {
 -- Zen-mode and Twilight setup
 require('zen-mode').setup {}
 require('twilight').setup {}
+
+-- Treesitter setup
+require'nvim-treesitter.configs'.setup {
+  ensure_installed = {"python", "lua", "vim", "rust"},
+  sync_install = false,
+  auto_install = false,
+  highlight = {
+    enable = true,
+    disable = {},
+    additional_vim_regex_highlighting = false,
+  },
+  indent = {
+    enable = true
+  },
+}
+
+-- Set foldmethod to use treesitter, but start with all folds open
+vim.wo.foldmethod = 'expr'
+vim.wo.foldexpr = 'nvim_treesitter#foldexpr()'
+vim.wo.foldlevel = 99
+
 EOF
