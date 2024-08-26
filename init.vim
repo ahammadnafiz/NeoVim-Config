@@ -1,108 +1,69 @@
-" @ahammadnafiz
-
-" Explicitly set compiler path
-let $PATH = $PATH . ';C:\MinGW\bin'
-let g:make_program = 'C:\MinGW\bin\mingw32-make.exe'
-
-" Vim-Plug Section
 call plug#begin()
-" Existing plugins
-Plug 'http://github.com/tpope/vim-surround'
-Plug 'https://github.com/preservim/nerdtree'
-Plug 'https://github.com/tpope/vim-commentary'
-Plug 'https://github.com/vim-airline/vim-airline'
-Plug 'https://github.com/ap/vim-css-color'
-Plug 'https://github.com/rafi/awesome-vim-colorschemes'
-Plug 'https://github.com/neoclide/coc.nvim', {'branch': 'release'}
-Plug 'https://github.com/ryanoasis/vim-devicons'
-Plug 'https://github.com/rstacruz/vim-closer'
+" Core plugins
+Plug 'tpope/vim-surround'
+Plug 'tpope/vim-commentary'
+Plug 'vim-airline/vim-airline'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'ryanoasis/vim-devicons'
 Plug 'bluz71/vim-moonfly-colors', { 'as': 'moonfly' }
-Plug 'jiangmiao/auto-pairs'
-Plug 'vimwiki/vimwiki'
+Plug 'lewis6991/gitsigns.nvim'
+
+" Lazy-loaded plugins
+Plug 'preservim/nerdtree', { 'on': 'NERDTreeToggle' }
+Plug 'ap/vim-css-color', { 'for': ['css', 'scss', 'html', 'javascript'] }
+Plug 'vimwiki/vimwiki', { 'on': ['VimwikiIndex', 'VimwikiDiaryIndex'] }
 Plug 'nvim-treesitter/nvim-treesitter', {'do': ':TSUpdate'}
 
-" Python-specific plugins
-Plug 'vim-python/python-syntax'
-Plug 'Vimjas/vim-python-pep8-indent'
+" Python-specific plugins (lazy-loaded)
+Plug 'vim-python/python-syntax', { 'for': 'python' }
+Plug 'Vimjas/vim-python-pep8-indent', { 'for': 'python' }
 Plug 'heavenshell/vim-pydocstring', { 'do': 'make install', 'for': 'python' }
 
-" Additional plugins for enhanced development
-Plug 'airblade/vim-gitgutter'
-Plug 'tpope/vim-fugitive'
-Plug 'preservim/tagbar'
-Plug 'Yggdroot/indentLine'
-Plug 'lewis6991/gitsigns.nvim'
-Plug 'folke/which-key.nvim'
+" Git plugins (lazy-loaded)
+Plug 'airblade/vim-gitgutter', { 'on': 'GitGutterToggle' }
+Plug 'tpope/vim-fugitive', { 'on': ['Git', 'Gstatus', 'Gcommit', 'Gpush', 'Gpull'] }
 
-" Telescope and its dependencies
-Plug 'nvim-lua/plenary.nvim'
-Plug 'nvim-telescope/telescope.nvim', { 'tag': '0.1.x' }
+" Additional plugins (lazy-loaded)
+Plug 'preservim/tagbar', { 'on': 'TagbarToggle' }
+Plug 'Yggdroot/indentLine', { 'on': 'IndentLinesToggle' }
+
+Plug 'lewis6991/impatient.nvim'
 Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
 Plug 'junegunn/fzf.vim'
 Plug 'nvim-tree/nvim-web-devicons'
 
-" New powerful plugins
-Plug 'folke/trouble.nvim'
-Plug 'lukas-reineke/indent-blankline.nvim'
-Plug 'numToStr/Comment.nvim'
-Plug 'folke/zen-mode.nvim'
-Plug 'folke/twilight.nvim'
+" New powerful plugins (lazy-loaded)
+Plug 'folke/trouble.nvim', { 'on': 'TroubleToggle' }
+Plug 'lukas-reineke/indent-blankline.nvim', { 'on': 'IndentBlanklineToggle' }
+Plug 'numToStr/Comment.nvim', { 'on': ['CommentToggle', 'CommentToggleInline'] }
 Plug 'nvim-lualine/lualine.nvim'
-Plug 'akinsho/bufferline.nvim'
-Plug 'lewis6991/impatient.nvim'
+Plug 'akinsho/bufferline.nvim', { 'tag': '*' }
 Plug 'windwp/nvim-autopairs'
-Plug 'norcalli/nvim-colorizer.lua'
-Plug 'folke/todo-comments.nvim'
-Plug 'ahmedkhalf/project.nvim'
 
-" Zettelkasten plugins
-Plug 'michal-h21/vim-zettel'
+" Zettelkasten plugins (lazy-loaded)
+Plug 'michal-h21/vim-zettel', { 'for': 'markdown' }
 
-" Rust plugin
-Plug 'rust-lang/rust.vim'
+" Rust plugin (lazy-loaded)
+Plug 'rust-lang/rust.vim', { 'for': 'rust' }
 
 call plug#end()
 
 " Basic Settings
-set number
-set relativenumber
-set autoindent
-set expandtab
-set tabstop=4
-set shiftwidth=4
-set smarttab
-set softtabstop=4
-set mouse=a
-set encoding=UTF-8
-set nowrap
-set cursorline
-set hidden
-set nobackup
-set nowritebackup
-set cmdheight=2
-set updatetime=300
-set shortmess+=c
-set signcolumn=yes
-set scrolloff=8
-set noshowmode
-set wrap
-set linebreak
-set showbreak=↪\ 
-set breakindent
+set number relativenumber
+set autoindent expandtab
+set tabstop=4 shiftwidth=4 smarttab softtabstop=4
+set mouse=a encoding=UTF-8
+set nowrap cursorline hidden
+set nobackup nowritebackup
+set cmdheight=2 updatetime=300 shortmess+=c signcolumn=yes
+set scrolloff=8 noshowmode
+set wrap linebreak showbreak=↪\  breakindent
 set guicursor=n-v-c-i:block
-
-" Additional settings
-set ignorecase
-set smartcase
-set incsearch
-set hlsearch
-set undofile
-set undodir=~/.vim/undodir
+set ignorecase smartcase incsearch hlsearch
+set undofile undodir=~/.vim/undodir
 set completeopt=menuone,noselect
-set pumheight=10
-set timeoutlen=300
-set splitbelow
-set splitright
+set pumheight=10 timeoutlen=300
+set splitbelow splitright
 
 " Color Scheme and Syntax Highlighting
 syntax enable
@@ -112,18 +73,9 @@ let g:python_highlight_all = 1
 
 " CoC Configuration
 let g:coc_global_extensions = [
-    \ 'coc-pyright',
-    \ 'coc-json',
-    \ 'coc-git',
-    \ 'coc-prettier',
-    \ 'coc-pairs',
-    \ 'coc-snippets',
-    \ 'coc-yaml',
-    \ 'coc-tslint-plugin',
-    \ 'coc-tsserver',
-    \ 'coc-css',
-    \ 'coc-html',
-    \ 'coc-lua'
+    \ 'coc-pyright', 'coc-json', 'coc-git', 'coc-prettier', 'coc-pairs',
+    \ 'coc-snippets', 'coc-yaml', 'coc-tslint-plugin', 'coc-tsserver',
+    \ 'coc-css', 'coc-html', 'coc-lua', 'coc-rust-analyzer'
     \ ]
 
 " Key mappings
@@ -141,6 +93,10 @@ inoremap <silent><expr> <cr> "\<c-g>u\<CR>"
 " Pydocstring configuration
 let g:pydocstring_formatter = 'google'
 
+" Rust-specific settings
+autocmd FileType rust nmap <leader>rt :RustTest<CR>
+autocmd FileType rust nmap <leader>rr :RustRun<CR>
+
 " Zettelkasten key mappings
 nnoremap <leader>zn :ZettelNew<space>
 nnoremap <leader>zo :ZettelOpen<CR>
@@ -151,9 +107,9 @@ nnoremap <leader>zt :ZettelGenerateTags<CR>
 nnoremap <leader>zs :ZettelSearch<CR>
 
 " fzf configuration
-nnoremap <leader>pf :Files<CR>
-nnoremap <leader>pg :Rg<CR>
-nnoremap <leader>pb :Buffers<CR>
+nnoremap <leader>ff :Files<CR>
+nnoremap <leader>fg :Rg<CR>
+nnoremap <leader>fb :Buffers<CR>
 
 " NERDTree configuration
 let g:NERDTreeDirArrowExpandable=" "
@@ -164,6 +120,7 @@ let g:airline_powerline_fonts = 1
 if !exists('g:airline_symbols')
     let g:airline_symbols = {}
 endif
+
 let g:airline_left_sep = ''
 let g:airline_left_alt_sep = ''
 let g:airline_right_sep = ''
@@ -180,25 +137,6 @@ augroup PythonSpecific
     autocmd FileType python setlocal foldlevel=99
 augroup END
 
-
-" Function to print compiler info (if needed)
-function! PrintCompilerInfo()
-    echo "Path: " . $PATH
-    echo "Make Program: " . g:make_program
-    if executable('gcc')
-        echo "GCC is executable"
-    else
-        echo "GCC is not executable"
-    endif
-    if executable('clang')
-        echo "Clang is executable"
-    else
-        echo "Clang is not executable"
-    endif
-endfunction
-
-command! CompilerInfo call PrintCompilerInfo()
-
 " Lua Configuration
 lua << EOF
 -- Load impatient for faster startup
@@ -206,39 +144,6 @@ require('impatient')
 
 -- Gitsigns setup
 require('gitsigns').setup()
-
--- Which-Key setup
-require('which-key').setup {}
-
--- Telescope setup
-local actions = require('telescope.actions')
-
-require('telescope').setup{
-  defaults = {
-    mappings = {
-      i = {
-        ["<C-j>"] = actions.move_selection_next,
-        ["<C-k>"] = actions.move_selection_previous,
-        ["<C-q>"] = actions.send_to_qflist,
-      },
-    },
-    file_ignore_patterns = {"node_modules"},
-  },
-  pickers = {
-    find_files = {
-      theme = "dropdown",
-    }
-  },
-}
-
--- Telescope keymaps
-local builtin = require('telescope.builtin')
-vim.keymap.set('n', '<leader>ff', builtin.find_files, {})
-vim.keymap.set('n', '<leader>fg', builtin.live_grep, {})
-vim.keymap.set('n', '<leader>fb', builtin.buffers, {})
-vim.keymap.set('n', '<leader>fh', builtin.help_tags, {})
-vim.keymap.set('n', '<leader>fr', builtin.oldfiles, {})
-vim.keymap.set('n', '<leader>fs', builtin.grep_string, {})
 
 -- Trouble setup
 require('trouble').setup {}
@@ -255,27 +160,6 @@ require('bufferline').setup {}
 
 -- Autopairs setup
 require('nvim-autopairs').setup {}
-
--- Colorizer setup
-require('colorizer').setup()
-
--- Todo-comments setup
-require('todo-comments').setup {}
-
--- Project setup
-require('project_nvim').setup {}
-
--- Comment setup
-require('Comment').setup()
-
--- Indent-blankline setup
-require("ibl").setup {
-    -- Add any specific configurations you want here
-}
-
--- Zen-mode and Twilight setup
-require('zen-mode').setup {}
-require('twilight').setup {}
 
 -- Treesitter setup
 require'nvim-treesitter.configs'.setup {
