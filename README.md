@@ -7,7 +7,7 @@
 </p>
 <p align="center">A powerful, feature-rich Neovim configuration optimized for Python development and general productivity.</p>
 <p align="center">
-  <img src="images/neovim_setup.png" alt="Neovim Setup Screenshot" width="600">
+  <img src="images/neovim_setup_ss.png" alt="Neovim Setup Screenshot" width="600">
 </p>
 
 [---](---)
