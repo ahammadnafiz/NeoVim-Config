@@ -88,3 +88,4 @@ We welcome contributions! Here's how you can help:
 5. Open a Pull Request
 
 <p align="center">Elevate your Neovim experience to new heights! ✨</p>
+
